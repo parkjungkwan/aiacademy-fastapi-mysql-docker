@@ -4,6 +4,7 @@ sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 basedir = os.path.dirname(os.path.abspath(__file__))
 
 from app.services.calculator import CalculatorService
+from app.services.user import UserService
 
 def print_menu():
     print('0. 전체프로그램 종료')
@@ -24,6 +25,11 @@ def main():
             first = int(input('첫번째 값 입력: '))
             second = int(input('두번째 값 입력: '))
             calculatorService.calculate(first, second)
+        elif menu == '2':
+            userService = UserService()
+            id = input('id')
+            password = input('password')
+            userService.login(id, password)
 
 if __name__ == '__main__' :
     main()
