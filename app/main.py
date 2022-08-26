@@ -36,12 +36,12 @@ def main():
             # scoreService = ScoreService()
             gradeService = GradeService()
             name = input('이름')
-            korean = input('국어')
-            english = input('영어')
-            math = input('수학')
+            korean = int(input('국어'))
+            english = int(input('영어'))
+            math = int(input('수학'))
             # grade = scoreService.score(name, korean, english, math)
-            grade = gradeService.score(name, korean, english, math)
-            print(grade)
+            grade = gradeService.get_grade(name, korean, english, math)
+            print(f'이름: {name} 학점: {grade}')
             
 if __name__ == '__main__' :
     main()
