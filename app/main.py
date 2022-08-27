@@ -7,12 +7,14 @@ from app.services.calculator import CalculatorService
 from app.services.user import UserService
 from app.services.grade import GradeService
 from app.services.pandas_quiz import PandasQuiz
+from app.services.titanic import TitanicService
 def print_menu():
     print('0. 전체프로그램 종료')
     print('1. 계산기 프로그램')
-    print('2. 로그인 프로그램') # 입력받은 아이디와 비번 콘솔에 출력하기
-    print('3. 성적표 프로그램') # 입력받은 아이디와 비번 콘솔에 출력하기
-    print('4. 판다스 퀴즈풀기') # 입력받은 아이디와 비번 콘솔에 출력하기
+    print('2. 로그인 프로그램') 
+    print('3. 성적표 프로그램') 
+    print('4. 판다스 퀴즈풀기') 
+    print('5. 타이타닉 프로그램') 
     menu = input('메뉴 선택')
     return menu
     
@@ -52,7 +54,11 @@ def main():
                     break
                 elif quiz_number == '1':
                     quiz.quiz_01()
-            
+        elif menu == '5':
+            titanicService = TitanicService()
+            titanicService.submit(
+                path='data/titanic/',train='train.csv', test='test.csv')
+
 if __name__ == '__main__' :
     main()
     
