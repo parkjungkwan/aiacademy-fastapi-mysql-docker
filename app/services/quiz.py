@@ -5,8 +5,7 @@ import random
 import string
 
 class Quiz(object):
-    def __init__(self) -> None:
-        pass
+    
     
     '''
     Q1. 다음 결과 출력
