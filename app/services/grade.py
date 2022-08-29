@@ -11,5 +11,11 @@ class GradeService(object):
     def get_avg(self):
         pass
     
+    def set_grade(self):
+        pass
+    
+    def get_grade(self):
+        pass
+    
     
     
