@@ -18,7 +18,8 @@ class Quiz(object):
                 2  2  4  6
     '''
     # 사전으로 DataFrame 생성하는 방법 (from_dict()사용) 
-    # df = pd.DataFrame.from_dict({}, orient='index', columns=[])
+    #
+    
     def quiz_1(self) :
         df = pd.DataFrame.from_dict(
             {'1' : [ 1,  3,  5],'2' : [2,  4,  6]},
@@ -72,6 +73,8 @@ class Quiz(object):
             GOJKU  62  17  75  49
     
     '''
+    # [i for i in []]
+    # [i for i in []]
     def id(self):
         return [ "".join([random.choice(string.ascii_letters) 
                           for i in range(5)]) for i in range(10)]
