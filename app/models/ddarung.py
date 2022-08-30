@@ -63,11 +63,12 @@ class DDarung:
         upper_bound = quartile_3 + (iqr * 1.5)
         return np.where((data_out>upper_bound)|
                         (data_out<lower_bound))
-    
+    '''
+    Index(['hour', 'hour_bef_temperature', 'hour_bef_precipitation',
+               'hour_bef_windspeed', 'hour_bef_humidity', 'hour_bef_visibility',
+               'hour_bef_ozone', 'hour_bef_pm10', 'hour_bef_pm2.5', 'count'],  
+    '''
     def make_stereotype(self, this):
-        # Index(['hour', 'hour_bef_temperature', 'hour_bef_precipitation',
-        #        'hour_bef_windspeed', 'hour_bef_humidity', 'hour_bef_visibility',
-        #        'hour_bef_ozone', 'hour_bef_pm10', 'hour_bef_pm2.5', 'count'],  
         train = this.train 
         hour_bef_precipitation_out_index= self.outliers(train['hour_bef_precipitation'])[0]
         hour_bef_windspeed_out_index= self.outliers(train['hour_bef_windspeed'])[0]
@@ -95,10 +96,10 @@ class DDarung:
         this.train = train
         return this
     
-    def remove_label_in_train(self, this):
+    def extract_label_in_train(self, this):
         train = this.train
         this.label = train['count']
-        this.train = train.drop(['count'],axis=1) #axis는 컬럼 
+        this.train = train.drop(['count'],axis=1) 
         Context.show_spec(this.train)
         return this
 
@@ -113,7 +114,7 @@ class DDarung:
 
         #2. 모델
         
-        model = BaggingRegressor(DecisionTreeRegressor(),
+        this.model = BaggingRegressor(DecisionTreeRegressor(),
                                 n_estimators=100,#해당 모델을 100번 훈련한다.
                                 n_jobs=-1,
                                 random_state=123
@@ -123,13 +124,14 @@ class DDarung:
         # 한가지 모델을 여러번 훈련한다.대표적인 Ensemble 모데 랜덤포레스트
 
         #3. 훈련
-        model.fit(x_train,y_train)
+        this.model.fit(x_train,y_train)
+        return this
 
-    def test(self):
+    def test(self, this):
         #4. 평가, 예측
         x_test = self.x_test
         y_test = self.y_test
-        model = self.model
+        model = this.model
         print('model.score :',model.score(x_test,y_test))
 
 
