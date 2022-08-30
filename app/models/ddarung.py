@@ -23,16 +23,6 @@ class DDarung:
         this.fname = fname
         return pd.read_csv(this.path+this.fname)
     
-        # submission = pd.read_csv(path + 'submission.csv',#예측에서 쓸거야!!
-        #                        index_col=0)
-                            
-        # print(test_set)
-        # print(test_set.shape) #(715, 9) #train_set과 열 값이 '1'차이 나는 건 count를 제외했기 때문이다.예측 단계에서 값을 대입
-
-        # print(test_set.columns)
-        # print(train_set.info()) #null은 누락된 값이라고 하고 "결측치"라고도 한다.
-        # print(train_set.describe()) 
-    
     def fillna_median(self, this):
         train = this.train
         test = this.test
@@ -74,18 +64,18 @@ class DDarung:
         return np.where((data_out>upper_bound)|
                         (data_out<lower_bound))
     
-    def dont_know(self):
+    def make_stereotype(self, this):
         # Index(['hour', 'hour_bef_temperature', 'hour_bef_precipitation',
         #        'hour_bef_windspeed', 'hour_bef_humidity', 'hour_bef_visibility',
         #        'hour_bef_ozone', 'hour_bef_pm10', 'hour_bef_pm2.5', 'count'],  
-        train_set = self.train_set  
-        hour_bef_precipitation_out_index= self.outliers(train_set['hour_bef_precipitation'])[0]
-        hour_bef_windspeed_out_index= self.outliers(train_set['hour_bef_windspeed'])[0]
-        hour_bef_humidity_out_index= self.outliers(train_set['hour_bef_humidity'])[0]
-        hour_bef_visibility_out_index= self.outliers(train_set['hour_bef_visibility'])[0]
-        hour_bef_ozone_out_index= self.outliers(train_set['hour_bef_ozone'])[0]
-        hour_bef_pm10_out_index= self.outliers(train_set['hour_bef_visibility'])[0]
-        hour_bef_pm25_out_index= self.outliers(train_set['hour_bef_pm2.5'])[0]
+        train = this.train 
+        hour_bef_precipitation_out_index= self.outliers(train['hour_bef_precipitation'])[0]
+        hour_bef_windspeed_out_index= self.outliers(train['hour_bef_windspeed'])[0]
+        hour_bef_humidity_out_index= self.outliers(train['hour_bef_humidity'])[0]
+        hour_bef_visibility_out_index= self.outliers(train['hour_bef_visibility'])[0]
+        hour_bef_ozone_out_index= self.outliers(train['hour_bef_ozone'])[0]
+        hour_bef_pm10_out_index= self.outliers(train['hour_bef_visibility'])[0]
+        hour_bef_pm25_out_index= self.outliers(train['hour_bef_pm2.5'])[0]
         # print(train_set2.loc[hour_bef_precipitation_out_index,'hour_bef_precipitation'])
         lead_outlier_index = np.concatenate((hour_bef_precipitation_out_index,
                                             hour_bef_windspeed_out_index,
@@ -97,24 +87,24 @@ class DDarung:
         print(len(lead_outlier_index)) #161개 
         print(lead_outlier_index)
         lead_not_outlier_index = []
-        for i in train_set.index:
+        for i in train.index:
             if i not in lead_outlier_index :
                 lead_not_outlier_index.append(i)
-        train_set_clean = train_set.loc[lead_not_outlier_index]      
-        train_set_clean = train_set_clean.reset_index(drop=True)
-        print(train_set_clean)
+        train = train.loc[lead_not_outlier_index]      
+        train = train.reset_index(drop=True)
+        this.train = train
+        return this
+    
+    def remove_label_in_train(self, this):
+        train = this.train
+        this.label = train['count']
+        this.train = train.drop(['count'],axis=1) #axis는 컬럼 
+        Context.show_spec(this.train)
+        return this
 
-    def learning(self):
-        train_set_clean = self.train_set_clean
-        x = train_set_clean.drop(['count'],axis=1) #axis는 컬럼 
-        print(x.columns)
-        print(x.shape) #(1459, 9)
-
-        y = train_set_clean['count']
-        
-        x = np.array(x)
-        y = np.array(y)
-
+    def learning(self, this):
+        x = np.array(this.train)
+        y = np.array(this.label)
         x_train, x_test, y_train, y_test = train_test_split(x, y, shuffle=True, train_size=0.7, random_state=1234)
 
         scaler = StandardScaler()
