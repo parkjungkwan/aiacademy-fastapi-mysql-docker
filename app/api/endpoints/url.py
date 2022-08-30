@@ -23,7 +23,9 @@ class Url:
             math = int(input('수학'))
             print(f'이름: {name} \
                 학점: {GradeService().get_grade(name,korean, english, math)}')
-        elif menu == DDARUNG: DDarung().exec()
+        elif menu == DDARUNG: DDarung().submit(
+            path='data/ddarung', train='train.csv', test='test.csv'
+        )
         
         elif menu == QUIZ_1: Quiz().quiz_1()
         elif menu == QUIZ_2: Quiz().quiz_2()

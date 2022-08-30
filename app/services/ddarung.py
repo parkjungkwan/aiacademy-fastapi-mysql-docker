@@ -4,6 +4,6 @@ class DDarung:
     def __init__(self) -> None:
         pass
     
-    def exec(self):
+    def submit(self, path, train, test):
         ddarung = DDarung()
-        ddarung.hook()
+        ddarung.hook(path, train, test)

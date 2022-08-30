@@ -16,8 +16,8 @@ class DDarung:
         self.y_test = None
         
     
-    def hook(self):
-        self.from_csv()
+    def hook(self, path, train, test):
+        self.from_csv(path, train, test)
         self.preprocess()
         self.learning()
         self.test()
