@@ -19,21 +19,12 @@ class DDarung:
         self.x_test = None
         self.y_test = None
         
-    
-    def hook(self, path, train, test):
-        self.from_csv(path, train, test)
-        self.preprocess()
-        self.learning()
-        self.test()
-    
     def from_csv(self,path, fname):
-        this = self.context()
+        this = self.context
         this.path = path
         this.fname = fname
         return pd.read_csv(this.path+this.fname)
     
-        train_set = pd.read_csv(path + train)
-        test_set = pd.read_csv(path + test)
         # submission = pd.read_csv(path + 'submission.csv',#예측에서 쓸거야!!
         #                        index_col=0)
                             
@@ -43,13 +34,6 @@ class DDarung:
         # print(test_set.columns)
         # print(train_set.info()) #null은 누락된 값이라고 하고 "결측치"라고도 한다.
         # print(train_set.describe()) 
-    
-    def preprocess(self):
-        self.missing_value_process_median()
-        self.missing_value_process_interpolate()
-        self.missing_value_process_mean()
-        self.missing_value_process_drop()
-        
     
     def missing_value_process_median(self):
 
