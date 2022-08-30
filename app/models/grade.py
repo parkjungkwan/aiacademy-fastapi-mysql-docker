@@ -1,4 +1,4 @@
-class Grade(object):
+class Grade:
     def __init__(self,name,kor,eng,math):
         self.name = name
         self.kor = kor
