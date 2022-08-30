@@ -24,8 +24,7 @@ class DDarungService:
         
     
     def submit(self, path, train, test):
-        this = self.preprocess(path, train, test)
-        Context.show_spec(this.train)
+        self.preprocess(path, train, test)
         
         '''
         count  = 0
