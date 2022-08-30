@@ -5,6 +5,7 @@ basedir = os.path.dirname(os.path.abspath(__file__))
 from app.api.endpoints.url import Url
 from app.constants.menus import LOGIN, LOGOUT, CALCULATOR, GRADE, \
     QUIZ_1, QUIZ_2, QUIZ_3, QUIZ_4
+    
 
 def print_menu():
     print(' ###################')
