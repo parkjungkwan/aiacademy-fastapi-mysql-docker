@@ -12,8 +12,6 @@ class DDarung:
     context = Context()
     
     def __init__(self) -> None:
-        self.train_set = None
-        self.test_set = None
         self.train_set_clean = None
         self.model = None
         self.x_test = None
@@ -35,36 +33,33 @@ class DDarung:
         # print(train_set.info()) #null은 누락된 값이라고 하고 "결측치"라고도 한다.
         # print(train_set.describe()) 
     
-    def missing_value_process_median(self):
-
-        ###### 결측치 처리 1.median ##### 
-        print(train_set.isnull().sum()) #각 컬럼당 결측치의 합계
-        train_set = train_set.fillna(train_set.median())
-        print(train_set.isnull().sum())
-        print(train_set.shape)
-        test_set = test_set.fillna(test_set.median())
-    def missing_value_process_interpolate(self):
-        print(train_set.isnull().sum()) #각 컬럼당 결측치의 합계
-        train_set = train_set.interpolate()
-        print(train_set.isnull().sum())
-        print(train_set.shape)
-        test_set = test_set.interpolate()
+    def fillna_median(self, this):
+        train = this.train
+        test = this.test
+        this.train = train.fillna(train.median())
+        this.test = test.fillna(test.median())
+        return this
+    
+    def fillna_interpolate(self, this):
+        train = this.train
+        test = this.test
+        this.train = train.interpolate()
+        this.test = test.interpolate()
+        return this
         
-    def missing_value_process_mean(self):
-        print(train_set.isnull().sum()) #각 컬럼당 결측치의 합계
-        train_set = train_set.fillna(train_set.mean())
-        print(train_set.isnull().sum())
-        print(train_set.shape)
-        test_set = test_set.fillna(test_set.mean())
-        
-    def missing_value_process_drop(self):
-        train_set = self.train_set
-        test_set = self.test_set
-        print(train_set.isnull().sum()) #각 컬럼당 결측치의 합계
-        train_set2 = train_set.dropna()
-        print(train_set.isnull().sum())
-        print(train_set.shape)
-        test_set2 = test_set.dropna()
+    def fillna_mean(self, this):
+        train = this.train
+        test = this.test
+        this.train = train.fillna(train.mean())
+        this.test = test.fillna(test.mean())
+        return this
+    
+    def drop_na(self, this):
+        train = this.train
+        test = this.test
+        this.train = train.dropna()
+        this.test = test.dropna()
+        return this
 
     def outliers(data_out):
         quartile_1, q2 , quartile_3 = np.percentile(data_out,
