@@ -51,7 +51,7 @@ class DDarung:
         this.test = test.dropna()
         return this
 
-    def outliers(data_out):
+    def outliers(self, data_out):
         quartile_1, q2 , quartile_3 = np.percentile(data_out,
                                                 [25,50,75]) # percentile 백분위
         print("1사분위 : ",quartile_1) # 25% 위치인수를 기점으로 사이에 값을 구함
@@ -100,7 +100,7 @@ class DDarung:
         train = this.train
         this.label = train['count']
         this.train = train.drop(['count'],axis=1) 
-        Context.show_spec(this.train)
+        # Context.show_spec(this.train)
         return this
 
     def learning(self, this):
@@ -112,9 +112,7 @@ class DDarung:
         x_train = scaler.fit_transform(x_train)
         x_test = scaler.transform(x_test)
 
-        #2. 모델
-        
-        this.model = BaggingRegressor(DecisionTreeRegressor(),
+        model = BaggingRegressor(DecisionTreeRegressor(),
                                 n_estimators=100,#해당 모델을 100번 훈련한다.
                                 n_jobs=-1,
                                 random_state=123
@@ -122,18 +120,11 @@ class DDarung:
         # Bagging 할 때는 스케일링이 무조건 필요하다.
         # Bagging(Bootstrap Aggregating)
         # 한가지 모델을 여러번 훈련한다.대표적인 Ensemble 모데 랜덤포레스트
-
         #3. 훈련
-        this.model.fit(x_train,y_train)
-        return this
-
-    def test(self, this):
+        model.fit(x_train,y_train)
         #4. 평가, 예측
-        x_test = self.x_test
-        y_test = self.y_test
-        model = this.model
         print('model.score :',model.score(x_test,y_test))
-
+        return this
 
         #=================  결측치 median 처리  =============  
         # tree-0.5338291078101032
