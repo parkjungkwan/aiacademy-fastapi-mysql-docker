@@ -1,8 +1,20 @@
 from sklearn.model_selection import train_test_split
 import pandas as pd
 import numpy as np 
+from sklearn.preprocessing import StandardScaler
+from sklearn.ensemble import BaggingRegressor
+from sklearn.tree import DecisionTreeRegressor
 
 class DDarung:
+    
+    def __init__(self) -> None:
+        self.train_set = None
+        self.test_set = None
+        self.train_set_clean = None
+        self.model = None
+        self.x_test = None
+        self.y_test = None
+        
     
     def hook(self):
         self.from_csv()
@@ -28,7 +40,11 @@ class DDarung:
         # print(train_set.describe()) 
     
     def preprocess(self):
-        pass
+        self.missing_value_process_median()
+        self.missing_value_process_interpolate()
+        self.missing_value_process_mean()
+        self.missing_value_process_drop()
+        
     
     def missing_value_process_median(self):
 
@@ -53,6 +69,8 @@ class DDarung:
         test_set = test_set.fillna(test_set.mean())
         
     def missing_value_process_drop(self):
+        train_set = self.train_set
+        test_set = self.test_set
         print(train_set.isnull().sum()) #각 컬럼당 결측치의 합계
         train_set2 = train_set.dropna()
         print(train_set.isnull().sum())
@@ -75,14 +93,15 @@ class DDarung:
     def dont_know(self):
         # Index(['hour', 'hour_bef_temperature', 'hour_bef_precipitation',
         #        'hour_bef_windspeed', 'hour_bef_humidity', 'hour_bef_visibility',
-        #        'hour_bef_ozone', 'hour_bef_pm10', 'hour_bef_pm2.5', 'count'],    
-        hour_bef_precipitation_out_index= outliers(train_set['hour_bef_precipitation'])[0]
-        hour_bef_windspeed_out_index= outliers(train_set['hour_bef_windspeed'])[0]
-        hour_bef_humidity_out_index= outliers(train_set['hour_bef_humidity'])[0]
-        hour_bef_visibility_out_index= outliers(train_set['hour_bef_visibility'])[0]
-        hour_bef_ozone_out_index= outliers(train_set['hour_bef_ozone'])[0]
-        hour_bef_pm10_out_index= outliers(train_set['hour_bef_visibility'])[0]
-        hour_bef_pm25_out_index= outliers(train_set['hour_bef_pm2.5'])[0]
+        #        'hour_bef_ozone', 'hour_bef_pm10', 'hour_bef_pm2.5', 'count'],  
+        train_set = self.train_set  
+        hour_bef_precipitation_out_index= self.outliers(train_set['hour_bef_precipitation'])[0]
+        hour_bef_windspeed_out_index= self.outliers(train_set['hour_bef_windspeed'])[0]
+        hour_bef_humidity_out_index= self.outliers(train_set['hour_bef_humidity'])[0]
+        hour_bef_visibility_out_index= self.outliers(train_set['hour_bef_visibility'])[0]
+        hour_bef_ozone_out_index= self.outliers(train_set['hour_bef_ozone'])[0]
+        hour_bef_pm10_out_index= self.outliers(train_set['hour_bef_visibility'])[0]
+        hour_bef_pm25_out_index= self.outliers(train_set['hour_bef_pm2.5'])[0]
         # print(train_set2.loc[hour_bef_precipitation_out_index,'hour_bef_precipitation'])
         lead_outlier_index = np.concatenate((hour_bef_precipitation_out_index,
                                             hour_bef_windspeed_out_index,
@@ -102,14 +121,13 @@ class DDarung:
         print(train_set_clean)
 
     def learning(self):
+        train_set_clean = self.train_set_clean
         x = train_set_clean.drop(['count'],axis=1) #axis는 컬럼 
         print(x.columns)
         print(x.shape) #(1459, 9)
 
         y = train_set_clean['count']
-        from sklearn.preprocessing import MinMaxScaler,StandardScaler
-        from sklearn.experimental import enable_halving_search_cv
-        from sklearn.model_selection import GridSearchCV,RandomizedSearchCV,HalvingGridSearchCV,KFold,StratifiedKFold
+        
         x = np.array(x)
         y = np.array(y)
 
@@ -120,11 +138,7 @@ class DDarung:
         x_test = scaler.transform(x_test)
 
         #2. 모델
-        from sklearn.ensemble import BaggingClassifier,RandomForestClassifier
-        from sklearn.ensemble import BaggingRegressor,RandomForestRegressor
-        from sklearn.tree import DecisionTreeClassifier,DecisionTreeRegressor
-        from xgboost import XGBClassifier, XGBRegressor
-        from sklearn.linear_model import LogisticRegression
+        
         model = BaggingRegressor(DecisionTreeRegressor(),
                                 n_estimators=100,#해당 모델을 100번 훈련한다.
                                 n_jobs=-1,
@@ -139,6 +153,9 @@ class DDarung:
 
     def test(self):
         #4. 평가, 예측
+        x_test = self.x_test
+        y_test = self.y_test
+        model = self.model
         print('model.score :',model.score(x_test,y_test))
 
 
