@@ -3,8 +3,9 @@ from app.services.user import UserService
 from app.services.grade import GradeService
 from app.services.quiz import Quiz
 from app.services.ddarung import DDarungService
+from app.services.titanic import TitanicService
 from app.constants.menus import LOGIN, LOGOUT, CALCULATOR, GRADE, \
-    QUIZ_1, QUIZ_2, QUIZ_3, QUIZ_4, DDARUNG
+    QUIZ_1, QUIZ_2, QUIZ_3, QUIZ_4, DDARUNG, TITANIC
 class Url:
     
     def router(self, menu):
@@ -16,6 +17,10 @@ class Url:
             CalculatorService().calculate(
                 int(input('첫번째 값 입력: ')), 
                 int(input('두번째 값 입력: ')))
+        elif menu == TITANIC:
+            titanicService = TitanicService()
+            titanicService.submit(
+                path='data/titanic/',train='train.csv', test='test.csv')
         elif menu == GRADE:
             name = input('이름')
             korean = int(input('국어'))
