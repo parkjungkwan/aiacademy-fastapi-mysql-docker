@@ -1,11 +1,15 @@
+from fnmatch import fnmatchcase
 from sklearn.model_selection import train_test_split
 import pandas as pd
 import numpy as np 
 from sklearn.preprocessing import StandardScaler
 from sklearn.ensemble import BaggingRegressor
 from sklearn.tree import DecisionTreeRegressor
+from app.utils.context import Context
 
 class DDarung:
+    
+    context = Context()
     
     def __init__(self) -> None:
         self.train_set = None
@@ -22,13 +26,14 @@ class DDarung:
         self.learning()
         self.test()
     
-    def from_csv(self):
-        #1. 데이터
-        path = 'C:\_data\ddarung/' # ".은 현재 폴더"
-        train_set = pd.read_csv(path + 'train.csv',
-                                )
-        test_set = pd.read_csv(path + 'test.csv', #예측에서 쓸거야!!
-                            )
+    def from_csv(self,path, fname):
+        this = self.context()
+        this.path = path
+        this.fname = fname
+        return pd.read_csv(this.path+this.fname)
+    
+        train_set = pd.read_csv(path + train)
+        test_set = pd.read_csv(path + test)
         # submission = pd.read_csv(path + 'submission.csv',#예측에서 쓸거야!!
         #                        index_col=0)
                             
