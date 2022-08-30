@@ -105,15 +105,17 @@ class Quiz(object):
     '''
     def quiz_5(self, subject) :
         scores = self.quiz_4()
+        scores.loc[:,subject]
         
     ''' 
     Q6 원하는 학생점수만 출력하시오. (아이디가 랜덤이므로 맨 위에 학생점수 출력으로 대체함)
         lDZid  57  90  55  24
     '''
+    
     def quiz_6(self, id) :
         print(f'{id}의 성적출력') # 당연히 id 가 일치할리 없음. 형식적으로 출력함
         scores = self.quiz_4()
-        
+        ic(scores.iloc[[0],:])
     '''
     Q7 각 학생들의 점수의 총합과 마지막 행은 과목총점 추가해서 출력
         ic| df5:  국어   영어   수학   사회   과학    총점
@@ -131,3 +133,7 @@ class Quiz(object):
     '''
     def quiz_7(self) :
         scores = self.quiz_4()
+        scores['총점'] = scores.sum(axis=1)
+        ls = scores.sum().tolist()
+        scores.loc['과목총점'] = ls
+        ic(scores)
